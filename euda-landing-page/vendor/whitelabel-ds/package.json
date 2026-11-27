@@ -1,0 +1,24 @@
+{
+  "name": "whitelabel-ds",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/whitelabel-ds.js",
+  "module": "./dist/whitelabel-ds.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./dist/whitelabel-ds.js"
+    },
+    "./styles.css": "./dist/whitelabel-ds.css"
+  },
+  "sideEffects": [
+    "*.css",
+    "./dist/whitelabel-ds.js"
+  ],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  }
+}

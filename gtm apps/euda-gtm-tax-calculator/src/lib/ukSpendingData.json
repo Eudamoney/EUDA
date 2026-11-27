@@ -1,0 +1,236 @@
+[
+  {
+    "name": "Social protection",
+    "percentage": 0.3318,
+    "description": "State pensions, benefits and care: support for older people, disabled people, families and people on low incomes.",
+    "subcategories": [
+      {
+        "name": "State pensions",
+        "percentage": 0.1262,
+        "description": "The State Pension and other pension payments to people over pension age."
+      },
+      {
+        "name": "Universal Credit and low-income support",
+        "percentage": 0.0707,
+        "description": "Universal Credit, legacy tax credits and income support for people on low incomes."
+      },
+      {
+        "name": "Sickness and disability",
+        "percentage": 0.0687,
+        "description": "Disability benefits such as PIP, plus social care for disabled adults."
+      },
+      {
+        "name": "Family and children",
+        "percentage": 0.0289,
+        "description": "Child Benefit, children's social care and support for families."
+      },
+      {
+        "name": "Care for older people",
+        "percentage": 0.0141,
+        "description": "Council-funded social care for older people."
+      },
+      {
+        "name": "Housing support",
+        "percentage": 0.0118,
+        "description": "Housing benefit and help with rent for people on low incomes."
+      },
+      {
+        "name": "Other social protection",
+        "percentage": 0.0091,
+        "description": "Other support, including compensation schemes."
+      },
+      {
+        "name": "Unemployment",
+        "percentage": 0.0011,
+        "description": "Jobseeker's Allowance and support for people out of work."
+      },
+      {
+        "name": "Survivors",
+        "percentage": 0.0011,
+        "description": "Bereavement support for widows, widowers and dependants."
+      }
+    ]
+  },
+  {
+    "name": "Health",
+    "percentage": 0.2098,
+    "description": "The NHS and other health services across the UK.",
+    "subcategories": [
+      {
+        "name": "Medical services",
+        "percentage": 0.2015,
+        "description": "Hospitals, GPs, dentists, prescriptions and community health care."
+      },
+      {
+        "name": "Central and other health services",
+        "percentage": 0.0059,
+        "description": "Public health and central health administration."
+      },
+      {
+        "name": "Medical research",
+        "percentage": 0.0024,
+        "description": "Publicly funded medical research."
+      }
+    ]
+  },
+  {
+    "name": "Debt interest and related",
+    "percentage": 0.1061,
+    "description": "Interest on the national debt, plus some related costs that official figures group with it.",
+    "subcategories": [
+      {
+        "name": "Central government debt interest",
+        "percentage": 0.0789,
+        "description": "Interest paid on government borrowing (gilts and other debt)."
+      },
+      {
+        "name": "Public sector pensions",
+        "percentage": 0.0158,
+        "description": "Pension costs for public sector workers that are classed with debt transactions."
+      },
+      {
+        "name": "Bank of England asset purchases",
+        "percentage": 0.01,
+        "description": "Costs of the Bank of England's asset purchase facility."
+      },
+      {
+        "name": "Local government and other debt interest",
+        "percentage": 0.0013,
+        "description": "Interest on borrowing by councils and public corporations."
+      }
+    ]
+  },
+  {
+    "name": "Education",
+    "percentage": 0.1024,
+    "description": "Schools, colleges, universities and early years education.",
+    "subcategories": [
+      {
+        "name": "Secondary education",
+        "percentage": 0.0495,
+        "description": "Secondary schools and sixth forms."
+      },
+      {
+        "name": "Primary and early years",
+        "percentage": 0.0354,
+        "description": "Primary schools, nurseries and early years education."
+      },
+      {
+        "name": "Further and other education",
+        "percentage": 0.0138,
+        "description": "Further education, training and other education spending."
+      },
+      {
+        "name": "Universities",
+        "percentage": 0.0037,
+        "description": "Public spending on higher education."
+      }
+    ]
+  },
+  {
+    "name": "Defence",
+    "percentage": 0.0533,
+    "description": "The armed forces, equipment and military aid.",
+    "subcategories": [
+      {
+        "name": "Military defence",
+        "percentage": 0.0474,
+        "description": "The Army, Navy and RAF, their equipment and bases."
+      },
+      {
+        "name": "Foreign military aid",
+        "percentage": 0.0033,
+        "description": "Military support to other countries."
+      },
+      {
+        "name": "Defence research",
+        "percentage": 0.0024,
+        "description": "Research and development for defence."
+      }
+    ]
+  },
+  {
+    "name": "Public order and safety",
+    "percentage": 0.0454,
+    "description": "Police, courts, prisons and fire services.",
+    "subcategories": [
+      {
+        "name": "Police",
+        "percentage": 0.0257,
+        "description": "Police forces across the UK."
+      },
+      {
+        "name": "Law courts",
+        "percentage": 0.0081,
+        "description": "Courts, legal aid and the justice system."
+      },
+      {
+        "name": "Prisons",
+        "percentage": 0.0068,
+        "description": "Prisons and probation."
+      },
+      {
+        "name": "Fire services",
+        "percentage": 0.0034,
+        "description": "Fire and rescue services."
+      },
+      {
+        "name": "Other public order",
+        "percentage": 0.0012,
+        "description": "Other public order and safety services."
+      }
+    ]
+  },
+  {
+    "name": "Transport",
+    "percentage": 0.0398,
+    "description": "Roads, railways, buses and other transport.",
+    "subcategories": []
+  },
+  {
+    "name": "Business and economy",
+    "percentage": 0.0367,
+    "description": "Support for business, energy, agriculture, employment and research.",
+    "subcategories": []
+  },
+  {
+    "name": "General public services",
+    "percentage": 0.0287,
+    "description": "Running government: Parliament, tax collection, foreign affairs and overseas aid.",
+    "subcategories": []
+  },
+  {
+    "name": "Housing and communities",
+    "percentage": 0.0183,
+    "description": "Housing development, community development and local amenities.",
+    "subcategories": [
+      {
+        "name": "Housing development",
+        "percentage": 0.0121,
+        "description": "Building and improving housing."
+      },
+      {
+        "name": "Community development",
+        "percentage": 0.0038,
+        "description": "Regeneration and local community projects."
+      },
+      {
+        "name": "Other community amenities",
+        "percentage": 0.0024,
+        "description": "Street lighting, water supply and other local amenities."
+      }
+    ]
+  },
+  {
+    "name": "Environment protection",
+    "percentage": 0.0156,
+    "description": "Waste, pollution control, flood defence and protecting nature.",
+    "subcategories": []
+  },
+  {
+    "name": "Recreation, culture and religion",
+    "percentage": 0.0123,
+    "description": "Sport, the arts, museums, libraries and broadcasting.",
+    "subcategories": []
+  }
+]

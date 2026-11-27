@@ -3,12 +3,38 @@ import spendingData from './spendingData.json';
 export interface TaxBreakdown {
     gross: number;
     net: number;
+    /** Income tax plus social contributions: the figure the spending breakdown shares out. */
     totalTax: number;
-    totalSS: number;
-    irpf: number;
-    ss: number;
+    /** Spain: IRPF. UK: income tax. */
+    incomeTax: number;
+    /** Spain: Social Security. UK: National Insurance. */
+    social: number;
     spending: SpendingCategory[];
     details?: TaxDetails;
+}
+
+/** Raw spending shares as stored in the data files (spendingData.json, ukSpendingData.json). */
+export interface SpendingSource {
+    name: string;
+    percentage: number;
+    description?: string;
+    subcategories?: { name: string; percentage: number; description?: string }[];
+}
+
+/** Shares a total contribution out across spending categories. */
+export function shareSpending(total: number, data: SpendingSource[]): SpendingCategory[] {
+    return data.map(cat => ({
+        name: cat.name,
+        percentage: cat.percentage,
+        amount: total * cat.percentage,
+        description: cat.description || '',
+        subcategories: (cat.subcategories || []).map(sub => ({
+            name: sub.name,
+            percentage: sub.percentage,
+            amount: total * sub.percentage,
+            description: sub.description || '',
+        })),
+    }));
 }
 
 export interface TaxDetails {
@@ -26,11 +52,25 @@ export interface TaxDetails {
     };
     // For Employee
     employerSS?: number;
+    // UK only
+    uk?: UkDetails;
     // Common
     irpfBrackets: IRPFBracketResult[];
     taxableBase: number;
 }
 
+export interface UkDetails {
+    /** Personal allowance after any taper (income over £100,000). */
+    personalAllowance: number;
+    /** How much of the personal allowance was lost to the taper. */
+    allowanceLost: number;
+    /** National Insurance by band: employees Class 1, self-employed Class 4. */
+    niBands: IRPFBracketResult[];
+    /** Employer National Insurance on an employee's salary (not on the payslip). */
+    employerNI?: number;
+}
+
+/** One band of a progressive tax: Spain's IRPF tramos, UK income tax bands and NI bands all use this. */
 export interface IRPFBracketResult {
     from: number;
     to: number;
@@ -208,26 +248,14 @@ export function getTaxBreakdown(amount: number, type: 'employee' | 'autonomo', p
     const totalContribution = irpf + ss;
     const net = annualGross - totalContribution;
 
-    const spending = (spendingData as any[]).map(cat => ({
-        name: cat.name,
-        percentage: cat.percentage,
-        amount: totalContribution * cat.percentage,
-        description: cat.description || '',
-        subcategories: (cat.subcategories || []).map((sub: any) => ({
-            name: sub.name,
-            percentage: sub.percentage,
-            amount: totalContribution * sub.percentage,
-            description: sub.description || ''
-        }))
-    }));
+    const spending = shareSpending(totalContribution, spendingData as SpendingSource[]);
 
     return {
         gross: annualGross,
         net,
         totalTax: totalContribution,
-        totalSS: ss,
-        irpf,
-        ss,
+        incomeTax: irpf,
+        social: ss,
         spending,
         details,
     };

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Share2,
   PieChart as PieChartIcon,
@@ -26,8 +26,10 @@ import {
   PieChart,
   Pie,
 } from 'recharts';
-import { getTaxBreakdown } from './lib/taxCalculations';
-import type { SpendingCategory } from './lib/taxCalculations';
+import type { SpendingCategory, TaxBreakdown } from './lib/taxCalculations';
+import { COUNTRIES, countryFromPath } from './lib/countries';
+import type { CountryId } from './lib/countries';
+import { EMPLOYEE_NI, EMPLOYER_NI, SELF_EMPLOYED_NI, UK_TAX_YEAR } from './lib/ukTax';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -59,9 +61,23 @@ let _ = (s: string): string => {
   return s;
 };
 
+/** Whole-unit money in the country's currency, e.g. "€1,234" or "£1,234". */
+function formatMoney(symbol: string, value: number) {
+  const rounded = Math.round(value);
+  return `${rounded < 0 ? '−' : ''}${symbol}${Math.abs(rounded).toLocaleString()}`;
+}
+
+const OTHER_COUNTRY: Record<CountryId, { id: CountryId; flag: string; label: string }> = {
+  spain: { id: 'uk', flag: '🇬🇧', label: 'UK' },
+  uk: { id: 'spain', flag: '🇪🇸', label: 'Spain' },
+};
+
 export default function App() {
+  const country = COUNTRIES[countryFromPath(window.location.pathname)];
+  const money = (value: number) => formatMoney(country.currencySymbol, value);
+  const other = OTHER_COUNTRY[country.id];
   const [amount, setAmount] = useState<string>('');
-  const [type, setType] = useState<'autonomo' | 'employee'>('autonomo');
+  const [type, setType] = useState<string>(country.workers[0].id);
   const [period, setPeriod] = useState<'monthly' | 'yearly'>('yearly');
   const [viewMode, setViewMode] = useState<'bar' | 'pie'>('bar');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -72,8 +88,27 @@ export default function App() {
 
   const breakdown = useMemo(() => {
     const val = parseFloat(amount) || 0;
-    return getTaxBreakdown(val, type, period);
-  }, [amount, type, period]);
+    return country.calculate(val, type, period);
+  }, [country, amount, type, period]);
+
+  const switchLocale = async (newLocale: 'en' | 'es') => {
+    await loadLocale(newLocale);
+    document.documentElement.lang = newLocale;
+    _currentLocale = newLocale;
+    setCurrentLocale(newLocale);
+  };
+
+  // The landing page links here with ?lang=es from its Spanish pages, so the calculator opens in Spanish too.
+  useEffect(() => {
+    const lang = new URLSearchParams(window.location.search).get('lang');
+    if (lang === 'es' && country.languages.includes('es')) switchLocale('es');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [country]);
+
+  useEffect(() => {
+    document.title = country.pageTitle;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', country.pageDescription);
+  }, [country]);
 
   const activeData = useMemo(() => {
     if (!selectedCategory) {
@@ -108,7 +143,7 @@ export default function App() {
   ];
 
   const handleShare = () => {
-    const text = `I contributed €${breakdown.totalTax.toLocaleString()} to Spanish public services! 🇪🇸\nSee where your tax goes:`;
+    const text = country.shareText(breakdown.totalTax.toLocaleString(undefined, { maximumFractionDigits: 0 }));
     const url = window.location.href;
 
     if (navigator.share) {
@@ -135,11 +170,11 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <a href="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
-              <img src="/euda-wordmark.svg" alt="EUDA" className="h-8 w-auto" />
+              <img src={`${import.meta.env.BASE_URL}euda-wordmark.svg`} alt="EUDA" className="h-8 w-auto" />
               <div className="w-px h-8 bg-border/40" />
               <div className="flex items-center gap-2">
                 <h1 className="text-xl font-bold tracking-tight">{_('Where do your taxes really go?')}</h1>
-                <span className="text-2xl" title="Spain">🇪🇸</span>
+                <span className="text-2xl" title={country.name}>{country.flag}</span>
               </div>
             </a>
           </div>
@@ -153,20 +188,22 @@ export default function App() {
               <MessageCircle size={16} className="text-[#5865F2]" />
               {_('Join Community')}
             </a>
-            <button
-              onClick={async () => {
-                const newLocale = currentLocale === 'en' ? 'es' : 'en';
-                await loadLocale(newLocale);
-                document.documentElement.lang = newLocale;
-                _currentLocale = newLocale;
-                setCurrentLocale(newLocale);
-              }}
+            <a
+              href={`/tax-calculator/${other.id}`}
+              className="px-3 py-1.5 rounded-full border border-border/40 hover:bg-card/50 transition-all text-sm font-medium flex items-center gap-2"
+              title={`${other.label} calculator`}
+            >
+              <span aria-hidden="true">{other.flag}</span>
+              {other.label}
+            </a>
+            {country.languages.length > 1 && <button
+              onClick={() => switchLocale(currentLocale === 'en' ? 'es' : 'en')}
               className="px-3 py-1.5 rounded-full border border-border/40 hover:bg-card/50 transition-all text-sm font-medium flex items-center gap-2"
               title={currentLocale === 'en' ? "Change to Spanish" : "Cambiar a Inglés"}
             >
               <Globe size={14} />
               {currentLocale === 'en' ? 'EN' : 'ES'}
-            </button>
+            </button>}
             <button
               onClick={handleShare}
               className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-primary-foreground hover:opacity-90 transition-all shadow-sm font-medium text-sm"
@@ -215,24 +252,18 @@ export default function App() {
 
               {/* Type Toggle */}
               <div className="p-1 bg-muted rounded-2xl flex gap-1">
-                <button
-                  onClick={() => setType('autonomo')}
-                  className={cn(
-                    "flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all",
-                    type === 'autonomo' ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {_('Autonomo')}
-                </button>
-                <button
-                  onClick={() => setType('employee')}
-                  className={cn(
-                    "flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all",
-                    type === 'employee' ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {_('Employee')}
-                </button>
+                {country.workers.map((w) => (
+                  <button
+                    key={w.id}
+                    onClick={() => setType(w.id)}
+                    className={cn(
+                      "flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all",
+                      type === w.id ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {_(w.label)}
+                  </button>
+                ))}
               </div>
 
               {/* Amount Input */}
@@ -252,7 +283,7 @@ export default function App() {
                         setHasShownModal(true);
                       }
                     }}
-                    placeholder={_('Earnings...')}
+                    placeholder={_(country.workers.find((w) => w.id === type)?.amountHint ?? 'Earnings...')}
                     className="w-full bg-card border-2 border-border/50 rounded-2xl py-6 pl-12 pr-28 text-2xl font-bold focus:border-primary focus:ring-0 transition-all outline-none"
                   />
                   <div className="absolute right-3 top-3 bottom-3 flex gap-1 bg-muted p-1 rounded-xl">
@@ -282,23 +313,23 @@ export default function App() {
               <div className="bg-primary/5 border border-primary/20 rounded-3xl p-8 space-y-6">
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">{_('Total Contribution')}</span>
-                  <span className="text-4xl font-black text-primary">€{breakdown.totalTax.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                  <span className="text-4xl font-black text-primary">{money(breakdown.totalTax)}</span>
                 </div>
                 <div className="h-px bg-primary/20" />
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground font-medium">{_('Income Tax (IRPF)')}</span>
-                    <span className="font-bold">€{breakdown.irpf.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                    <span className="text-muted-foreground font-medium">{_(country.labels.incomeTax)}</span>
+                    <span className="font-bold">{money(breakdown.incomeTax)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground font-medium">{_('Social Security')}</span>
-                    <span className="font-bold">€{breakdown.ss.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                    <span className="text-muted-foreground font-medium">{_(country.labels.social)}</span>
+                    <span className="font-bold">{money(breakdown.social)}</span>
                   </div>
                 </div>
                 <div className="pt-2">
                   <div className="flex justify-between text-lg font-bold">
                     <span className="text-foreground">{_('Net Take Home')}</span>
-                    <span className="text-success">€{breakdown.net.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                    <span className="text-success">{money(breakdown.net)}</span>
                   </div>
                 </div>
               </div>
@@ -318,7 +349,10 @@ export default function App() {
                   </div>
                 </button>
 
-                {isExplainerOpen && (
+                {isExplainerOpen && country.id === 'uk' && (
+                  <UkExplainer breakdown={breakdown} worker={type} money={money} />
+                )}
+                {isExplainerOpen && country.id === 'spain' && (
                   <div className="px-6 pb-6 space-y-5 text-sm">
                     {type === 'autonomo' && breakdown.details ? (
                       <div className="space-y-5">
@@ -376,7 +410,7 @@ export default function App() {
                             </div>
                             <div className="flex justify-between font-bold">
                               <span className="text-foreground">{_('= Annual SS')}</span>
-                              <span className="text-foreground">€{breakdown.ss.toLocaleString(undefined, { maximumFractionDigits: 0 })}/{_currentLocale === 'es' ? 'año' : 'yr'}</span>
+                              <span className="text-foreground">€{breakdown.social.toLocaleString(undefined, { maximumFractionDigits: 0 })}/{_currentLocale === 'es' ? 'año' : 'yr'}</span>
                             </div>
                           </div>
                           <p className="text-xs text-muted-foreground/70">
@@ -406,11 +440,11 @@ export default function App() {
                             ))}
                             <div className="border-t border-border/30 pt-2 flex justify-between font-bold">
                               <span className="text-foreground">{_('= Total IRPF')}</span>
-                              <span className="text-foreground">€{breakdown.irpf.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                              <span className="text-foreground">€{breakdown.incomeTax.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                             </div>
                           </div>
                           <p className="text-xs text-muted-foreground/70">
-                            {_('Taxable base:')} €{breakdown.details.netYields?.toLocaleString(undefined, { maximumFractionDigits: 0 })} ({_('net yields')}) − €{breakdown.ss.toLocaleString(undefined, { maximumFractionDigits: 0 })} (SS) = €{breakdown.details.taxableBase.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                            {_('Taxable base:')} €{breakdown.details.netYields?.toLocaleString(undefined, { maximumFractionDigits: 0 })} ({_('net yields')}) − €{breakdown.social.toLocaleString(undefined, { maximumFractionDigits: 0 })} (SS) = €{breakdown.details.taxableBase.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                           </p>
                         </div>
                       </div>
@@ -440,7 +474,7 @@ export default function App() {
                             ))}
                             <div className="border-t border-border/30 pt-2 flex justify-between font-bold">
                               <span className="text-foreground">{_('= Total IRPF')}</span>
-                              <span className="text-foreground">€{breakdown.irpf.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
+                              <span className="text-foreground">€{breakdown.incomeTax.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
                             </div>
                           </div>
                         )}
@@ -479,7 +513,7 @@ export default function App() {
                       <p className="text-muted-foreground max-w-lg">
                         {selectedCategory
                           ? _(`Specific breakdown of how your contributions are spent within {0}.`).replace('{0}', _(selectedCategory))
-                          : _(`Based on 2024 state budgets, here is how your €{0} is distributed.`).replace('{0}', breakdown.totalTax.toLocaleString(undefined, { maximumFractionDigits: 0 }))
+                          : _(country.spendingIntro).replace('{0}', breakdown.totalTax.toLocaleString(undefined, { maximumFractionDigits: 0 }))
                         }
                       </p>
                     </div>
@@ -551,7 +585,7 @@ export default function App() {
                               return (
                                 <div className="bg-popover border border-border p-4 rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
                                   <p className="font-bold text-sm mb-1">{_(String(payload[0].name ?? ''))}</p>
-                                  <p className="text-primary text-xl font-black mb-1">€{Number(payload[0].value).toLocaleString()}</p>
+                                  <p className="text-primary text-xl font-black mb-1">{money(Number(payload[0].value))}</p>
                                   <p className="text-xs text-muted-foreground">{p.percentage}% {_('of your total tax')}</p>
                                   {p.hasSubcategories && !selectedCategory && (
                                     <p className="text-[10px] text-primary font-bold mt-2 uppercase tracking-tight">{_('Click to drill down')}</p>
@@ -599,7 +633,7 @@ export default function App() {
                               return (
                                 <div className="bg-popover border border-border p-4 rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
                                   <p className="font-bold text-sm mb-1">{_(String(payload[0].name ?? ''))}</p>
-                                  <p className="text-primary text-xl font-black mb-1">€{Number(payload[0].value).toLocaleString()}</p>
+                                  <p className="text-primary text-xl font-black mb-1">{money(Number(payload[0].value))}</p>
                                   <p className="text-xs text-muted-foreground">{p.percentage}% {_('of total')}</p>
                                 </div>
                               );
@@ -623,7 +657,7 @@ export default function App() {
                         <div className="w-1 h-8 rounded-full" style={{ backgroundColor: COLORS[i] }} />
                         <div className="overflow-hidden">
                           <p className="text-[10px] font-bold text-muted-foreground uppercase truncate">{_(item.name)}</p>
-                          <p className="text-lg font-black truncate">€{Number(item.value).toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
+                          <p className="text-lg font-black truncate">{money(Number(item.value))}</p>
                         </div>
                       </button>
                     ))}
@@ -639,7 +673,7 @@ export default function App() {
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <h2 className="text-2xl font-bold">{_('Full Spending Table')}</h2>
-              <p className="text-muted-foreground">{_('Every euro accounted for, down to the subcategory level.')}</p>
+              <p className="text-muted-foreground">{_(country.tableIntro)}</p>
             </div>
           </div>
 
@@ -654,7 +688,7 @@ export default function App() {
               </thead>
               <tbody className="divide-y divide-border/30">
                 {breakdown.spending.map((cat, idx) => (
-                  <CategoryRow key={cat.name} category={cat} color={COLORS[idx % COLORS.length]} />
+                  <CategoryRow key={cat.name} category={cat} color={COLORS[idx % COLORS.length]} money={money} />
                 ))}
               </tbody>
             </table>
@@ -734,11 +768,11 @@ export default function App() {
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-muted-foreground pt-4 border-t border-border/20">
-            <p className="text-xs">{_('Data sourced from Spain General State Budgets 2024')}</p>
+            <p className="text-xs">{_(country.dataNote)}</p>
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs">
-              <a href="https://www.igae.pap.hacienda.gob.es/sitios/igae/es-ES/Contabilidad/ContabilidadNacional/Publicaciones/paginas/iacogof.aspx" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors underline-offset-2 hover:underline">{_('IGAE COFOG Data')}</a>
-              <a href="https://transparencia.gob.es/en/publicidad-activa/por-materias/informacion-economico-presupuestaria/presupuestos-generales-estado/pge-gastos" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors underline-offset-2 hover:underline">{_('Presupuestos Generales')}</a>
-              <a href="https://sede.agenciatributaria.gob.es/Sede/en_gb/educacion-civico-tributaria/programa-educacion-civico-tributaria/que-son-impuestos/contenidos/gastos-publicos/distribucion-funcional-gasto-publico.html" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors underline-offset-2 hover:underline">{_('Tax Agency')}</a>
+              {country.sources.map((src) => (
+                <a key={src.url} href={src.url} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors underline-offset-2 hover:underline">{_(src.label)}</a>
+              ))}
             </div>
           </div>
         </div>
@@ -747,7 +781,7 @@ export default function App() {
   );
 }
 
-function CategoryRow({ category, color }: { category: SpendingCategory, color: string }) {
+function CategoryRow({ category, color, money }: { category: SpendingCategory, color: string, money: (v: number) => string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -778,7 +812,7 @@ function CategoryRow({ category, color }: { category: SpendingCategory, color: s
           </div>
         </td>
         <td className="px-8 py-5 text-right font-medium text-muted-foreground align-top">{(category.percentage * 100).toFixed(1)}%</td>
-        <td className="px-8 py-5 text-right font-bold align-top">€{category.amount.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+        <td className="px-8 py-5 text-right font-bold align-top">{money(category.amount)}</td>
       </tr>
       {isOpen && category.subcategories.map((sub) => (
         <tr key={sub.name} className="bg-muted/5 text-[13px]">
@@ -791,9 +825,80 @@ function CategoryRow({ category, color }: { category: SpendingCategory, color: s
             </div>
           </td>
           <td className="px-8 py-4 text-right text-muted-foreground/60 align-top">{(sub.percentage * 100).toFixed(1)}%</td>
-          <td className="px-8 py-4 text-right font-medium opacity-80 align-top">€{sub.amount.toLocaleString(undefined, { maximumFractionDigits: 0 })}</td>
+          <td className="px-8 py-4 text-right font-medium opacity-80 align-top">{money(sub.amount)}</td>
         </tr>
       ))}
     </>
+  );
+}
+
+/** UK version of "How your contribution is calculated": allowance, income tax bands, National Insurance. */
+function UkExplainer({ breakdown, worker, money }: { breakdown: TaxBreakdown; worker: string; money: (v: number) => string }) {
+  const uk = breakdown.details?.uk;
+  if (!breakdown.details || !uk) return null;
+  const employee = worker === 'employee';
+  const bandTable = (rows: { from: number; to: number; rate: number; taxableInBracket: number; taxPaid: number }[], totalLabel: string, total: number) => (
+    <div className="bg-card/50 rounded-xl p-4 space-y-2 font-mono text-xs">
+      <div className="flex justify-between text-muted-foreground/60 text-[10px] uppercase tracking-wider pb-1">
+        <span>Band</span>
+        <span>Rate</span>
+        <span>Taxed</span>
+        <span>Paid</span>
+      </div>
+      {rows.map((b, i) => (
+        <div key={i} className="flex justify-between items-center">
+          <span className="text-muted-foreground w-28">{money(b.from)}–{money(b.to)}</span>
+          <span className="text-primary font-bold w-12 text-center">{(b.rate * 100).toFixed(0)}%</span>
+          <span className="text-foreground w-20 text-right">{money(b.taxableInBracket)}</span>
+          <span className="text-foreground w-20 text-right font-bold">{money(b.taxPaid)}</span>
+        </div>
+      ))}
+      <div className="border-t border-border/30 pt-2 flex justify-between font-bold">
+        <span className="text-foreground">{totalLabel}</span>
+        <span className="text-foreground">{money(total)}</span>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="px-6 pb-6 space-y-5 text-sm">
+      <div className="space-y-3">
+        <p className="text-muted-foreground">
+          <strong className="text-foreground">Step 1: Personal allowance</strong>
+        </p>
+        <p className="text-muted-foreground">
+          The first <span className="text-foreground">{money(uk.personalAllowance)}</span> of your {employee ? 'salary' : 'profit'} is tax-free.
+          {uk.allowanceLost > 0 && (
+            <> Above £100,000 the allowance shrinks by £1 for every £2, so yours is {money(uk.allowanceLost)} lower.</>
+          )}
+        </p>
+      </div>
+      <div className="space-y-3">
+        <p className="text-muted-foreground">
+          <strong className="text-foreground">Step 2: Income Tax</strong> — progressive bands ({UK_TAX_YEAR})
+        </p>
+        {bandTable(breakdown.details.irpfBrackets, '= Total Income Tax', breakdown.incomeTax)}
+      </div>
+      <div className="space-y-3">
+        <p className="text-muted-foreground">
+          <strong className="text-foreground">Step 3: National Insurance</strong> — {employee ? 'Class 1, taken from your pay' : 'Class 4, on your profit'}
+        </p>
+        {uk.niBands.length > 0
+          ? bandTable(uk.niBands, '= Total National Insurance', breakdown.social)
+          : <p className="text-muted-foreground">No National Insurance below {money((employee ? EMPLOYEE_NI : SELF_EMPLOYED_NI).threshold)} a year.</p>}
+      </div>
+      {employee && uk.employerNI !== undefined && (
+        <p className="text-xs text-muted-foreground/70">
+          💡 Your employer also pays {(EMPLOYER_NI.rate * 100).toFixed(0)}% National Insurance on your salary above {money(EMPLOYER_NI.threshold)}: about{' '}
+          <span className="text-foreground">{money(uk.employerNI)}</span> a year that never shows on your payslip.
+        </p>
+      )}
+      {!employee && (
+        <p className="text-xs text-muted-foreground/70">
+          💡 Enter your profit: what you earn minus allowable business expenses. Class 2 National Insurance is no longer compulsory.
+        </p>
+      )}
+      <p className="text-xs text-muted-foreground/70">Rates for England, Wales and Northern Ireland. Scotland has its own Income Tax bands.</p>
+    </div>
   );
 }

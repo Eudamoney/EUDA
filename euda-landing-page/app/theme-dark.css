@@ -1,0 +1,81 @@
+/* Dark theme for whitelabel-ds, done the way the system asks to be re-skinned: by overriding tokens, not
+   component CSS. whitelabel-ds has no dark theme of its own, so this swaps the four grey scales every
+   semantic token reads (neutral, control, zinc, primary) for dark versions, plus the few tokens that are
+   hard-coded light (button bevels, subtle fill). Remove data-theme="dark" from <html> to go back to light.
+   This is the high-contrast version: the page is true black (#000) and the strongest text true white (#fff).
+   Status colours (error, info, success, warning) are left as the system ships them. */
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surfaces and text. 0 is the page; 900 is the strongest text. */
+  --color-neutral-0: #000000;
+  --color-neutral-25: #080808;
+  --color-neutral-50: #0e0e0e;
+  --color-neutral-100: #161616;
+  --color-neutral-200: #1f1f1f;
+  --color-neutral-300: #2e2e2e;
+  --color-neutral-400: #4a4a4a;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #999999;
+  --color-neutral-700: #b3b3b3;
+  --color-neutral-800: #e6e6e6;
+  --color-neutral-900: #ffffff;
+  --color-neutral-500-20: #e6e6e633;
+
+  /* Field and control fills. */
+  --color-control-0: #050505;
+  --color-control-25: #080808;
+  --color-control-50: #0e0e0e;
+  --color-control-100: #171717;
+  --color-control-200: #222222;
+  --color-control-300: #2e2e2e;
+  --color-control-400: #525252;
+  --color-control-500: #808080;
+  --color-control-600: #a6a6a6;
+  --color-control-700: #cccccc;
+  --color-control-800: #e6e6e6;
+  --color-control-900: #f5f5f5;
+  --color-control-950: #ffffff;
+
+  --color-zinc-0: #050505;
+  --color-zinc-25: #080808;
+  --color-zinc-50: #0c0c0c;
+  --color-zinc-100: #161616;
+  --color-zinc-200: #222222;
+  --color-zinc-300: #2e2e2e;
+  --color-zinc-400: #525252;
+  --color-zinc-500: #808080;
+  --color-zinc-600: #a6a6a6;
+  --color-zinc-700: #cccccc;
+  --color-zinc-800: #e6e6e6;
+  --color-zinc-900: #f5f5f5;
+  --color-zinc-700-20: #cccccc33;
+
+  /* Action colour: the primary button turns white with black text (its label reads --content-inverse,
+     which follows neutral-0). 700 rest, 600 hover, 800 pressed, as in the light skin. */
+  --color-primary-0: #000000;
+  --color-primary-25: #080808;
+  --color-primary-50: #0e0e0e;
+  --color-primary-100: #171717;
+  --color-primary-200: #262626;
+  --color-primary-300: #404040;
+  --color-primary-400: #737373;
+  --color-primary-500: #a6a6a6;
+  --color-primary-600: #ebebeb;
+  --color-primary-700: #ffffff;
+  --color-primary-800: #d9d9d9;
+  --color-primary-900: #ffffff;
+
+  /* Tokens the light skin hard-codes. */
+  --background-subtle: rgba(255, 255, 255, .1);
+  --button-raised-primary: inset 0 -1px 0 0 #00000040, inset 0 0 0 1px #ffffff;
+  --button-raised-neutral: inset 0 -1px 0 0 #000000, inset 0 0 0 1px #ffffff1a, inset 0 .5px 0 1px #ffffff14;
+  --button-pressed-primary: inset 0 1px 6px 0 #0000004d;
+  /* The one-time shine sweep is white on a dark button; on the white button it needs to be dark. */
+  --button-shine: #00000022;
+  /* Brand accent, read by the orb button and links: the light skin's values are dark greys. */
+  --brand-accent: #8c8c8c;
+  --brand-accent-strong: #ffffff;
+  --brand-accent-light: #4a4a4a;
+}

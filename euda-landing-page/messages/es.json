@@ -1,4 +1,8 @@
 {
+    "meta": {
+        "title": "EUDA - Que tu alquiler cuente",
+        "description": "EUDA destina una parte de lo que te cuesta el alquiler a una Hucha de Alquiler que crece. Pagas lo mismo. Tu casero cobra lo mismo."
+    },
     "hero": {
         "headline": "Has pagado miles y miles en alquiler.",
         "headline2": "¿Y qué has sacado de ello?",
@@ -10,13 +14,17 @@
         "cityPlaceholder": "Tu ciudad",
         "button": "Apúntate",
         "joining": "Apuntándote...",
-        "success": "¡Ya estás en la lista!"
+        "success": "¡Ya estás en la lista!",
+        "emailLabel": "Email",
+        "cityLabel": "Ciudad (opcional)",
+        "genericError": "Algo ha fallado. Inténtalo de nuevo.",
+        "successBody": "Te escribiremos pronto.",
+        "alreadyJoined": "Ya estás en la lista de espera. Te escribiremos pronto.",
+        "invalidEmail": "Introduce un email válido."
     },
     "howItWorks": {
         "title": "Así funciona",
-        "p1": "Cada mes que pagas el alquiler a través de EUDA, una parte va directa a tu",
         "rentPot": "Hucha de Alquiler",
-        "p2": "Se acumula sin que te des cuenta. 12 meses después tienes ahorros reales, sacados por completo del alquiler que ya estabas pagando.",
         "noFees": "Sin comisiones",
         "noCatches": "Sin letra pequeña",
         "landlord": "Tu casero no tiene que hacer nada"
@@ -30,9 +38,7 @@
         "p2pre": "Un inquilino medio dedica",
         "p2bold": "el 40% de su sueldo neto",
         "p2post": "al alquiler. Nada de eso vuelve.",
-        "p3": "EUDA no cambia lo que pagas. Cambia lo que pasa con ello.",
-        "p4pre": "Recuperamos una pequeña parte de lo que ya se iba — de los intereses de tu pago, de cambios de proveedor, del gasto local — y lo ponemos en una",
-        "p4post": "a tu nombre. Es tuyo. Se mueve contigo cuando te mudas. Y crece cada mes, pienses en ello o no.",
+        "p3": "Creemos que pagar el alquiler debería darte algo a cambio. Y ser un inquilino fiable y constante debería darte aún más.",
         "p5": "Estamos construyendo esto ahora. Si alquilas y estás harto de ver cómo se esfuma tu dinero, apúntate."
     },
     "cta": {
@@ -43,15 +49,148 @@
     },
     "nav": {
         "tools": "Herramientas",
-        "taxCalculator": "¿A dónde van tus impuestos?",
+        "taxCalculatorSpain": "¿A dónde van tus impuestos? España",
+        "taxCalculatorUk": "¿A dónde van tus impuestos? Reino Unido",
         "community": "Comunidad",
         "about": "Nosotros",
-        "joinWaitlist": "Apúntate"
+        "joinWaitlist": "Apúntate",
+        "themeToLight": "Cambiar a modo claro",
+        "themeToDark": "Cambiar a modo oscuro"
     },
     "footer": {
         "terms": "Términos",
         "privacy": "Privacidad",
         "contact": "Contacto",
-        "copyright": "© 2026 EUDA. Hecho con cariño."
+        "copyright": "© 2026 EUDA. Hecho con cariño.",
+        "legalLinks": "Información legal"
+    },
+    "journey": {
+        "eyebrow": "Tu primer año",
+        "phase1Title": "Configúralo. Empieza a ahorrar.",
+        "step1Title": "Conecta tu banco",
+        "step1Body": "Vincula tu cuenta de forma segura con open banking. Creamos tu perfil de inquilino.",
+        "step2Title": "Cambia tus suministros y tu fibra",
+        "step2Body": "Pasa tus facturas a mejores tarifas. Lo que ahorras va a tu Hucha de Alquiler.",
+        "step3Title": "Invita a tus amigos",
+        "step3Body": "Trae a amigos que también alquilan. Juntos, la hucha crece más rápido.",
+        "phase1Milestone": "en tu Hucha de Alquiler al sexto mes",
+        "phase2Title": "Más que dinero.",
+        "phase2Body": "Ser miembro mejora tu alquiler, no solo lo abarata.",
+        "unlockScore": "Puntuación de tu perfil de inquilino",
+        "unlock1": "Revisión de tu contrato de alquiler",
+        "unlock2": "Acceso a caseros honestos y justos con viviendas exclusivas",
+        "unlock3": "Herramientas para un alquiler más justo",
+        "note": "Cantidades de ejemplo. Lo que ahorres depende del importe de tu alquiler, tus facturas y las acciones que realices con nosotros.",
+        "noteLink": "Ver nota sobre las cantidades de ejemplo"
+    },
+    "legal": {
+        "draftTitle": "Borrador",
+        "draftBody": "Esta página es un borrador. El texto entre [corchetes] está pendiente de confirmar por EUDA y su asesor legal.",
+        "privacy": {
+            "title": "Política de privacidad",
+            "updated": "Última actualización: [fecha]",
+            "sections": [
+                {
+                    "heading": "Quiénes somos",
+                    "body": [
+                        "EUDA está gestionada por [razón social], [domicilio social], [número de registro / NIF]. Somos el responsable del tratamiento de los datos personales descritos aquí.",
+                        "Preguntas sobre tus datos: hello@euda.dev."
+                    ]
+                },
+                {
+                    "heading": "Qué datos recogemos",
+                    "body": [
+                        "Cuando te apuntas a la lista de espera recogemos tu email, la ciudad que indiques (opcional) y la fecha de registro.",
+                        "[Si se añaden los campos previstos: el mercado y el idioma en que te registraste, y la campaña publicitaria que te trajo a la web.]"
+                    ]
+                },
+                {
+                    "heading": "Para qué los usamos y base legal",
+                    "body": [
+                        "Usamos tus datos para avisarte cuando EUDA llegue a tu ciudad y enviarte las novedades a las que te has apuntado.",
+                        "Base legal: [tu consentimiento / nuestro interés legítimo — pendiente de confirmar con nuestro asesor]."
+                    ]
+                },
+                {
+                    "heading": "Dónde se guardan y quién los trata",
+                    "body": [
+                        "La web está alojada en Vercel, y los datos de la lista de espera se guardan de forma privada en el almacenamiento de Vercel (Vercel Blob). Vercel actúa como encargado del tratamiento y solo trata los datos siguiendo nuestras instrucciones.",
+                        "Región de almacenamiento y transferencias internacionales: [pendiente de confirmar, con las garantías aplicadas, por ejemplo cláusulas contractuales tipo]."
+                    ]
+                },
+                {
+                    "heading": "Cuánto tiempo los conservamos",
+                    "body": [
+                        "[Conservamos tus datos hasta que nos pidas eliminarlos, o durante [plazo] tras el lanzamiento, lo que ocurra antes.]"
+                    ]
+                },
+                {
+                    "heading": "Tus derechos",
+                    "body": [
+                        "Puedes pedir acceder a tus datos, rectificarlos o suprimirlos, oponerte a su uso o retirar tu consentimiento en cualquier momento. Escríbenos a hello@euda.dev y te responderemos en el plazo de un mes."
+                    ]
+                },
+                {
+                    "heading": "Cookies y analítica",
+                    "body": [
+                        "[Esta web no usa cookies. Si se añade analítica sin cookies, descríbela aquí.]"
+                    ]
+                },
+                {
+                    "heading": "Reclamaciones",
+                    "body": [
+                        "Puedes presentar una reclamación ante la autoridad de protección de datos: en España la Agencia Española de Protección de Datos (aepd.es), en el Reino Unido la Information Commissioner's Office (ico.org.uk)."
+                    ]
+                }
+            ]
+        },
+        "terms": {
+            "title": "Condiciones de uso",
+            "updated": "Última actualización: [fecha]",
+            "sections": [
+                {
+                    "heading": "Sobre estas condiciones",
+                    "body": [
+                        "Estas condiciones regulan el uso de esta web, gestionada por [razón social]. Al usar la web, las aceptas."
+                    ]
+                },
+                {
+                    "heading": "La lista de espera",
+                    "body": [
+                        "Apuntarte a la lista de espera es gratis y no crea ninguna cuenta ni obligación para ninguna de las partes. EUDA aún no está disponible, y las funciones, ejemplos y cantidades de esta web pueden cambiar antes del lanzamiento."
+                    ]
+                },
+                {
+                    "heading": "Calculadoras de impuestos y ejemplos",
+                    "body": [
+                        "Las calculadoras de impuestos y los ejemplos de la Hucha de Alquiler son estimaciones meramente informativas. No son asesoramiento fiscal, financiero ni legal. Consulta tu caso con la Agencia Tributaria, HMRC o un asesor cualificado."
+                    ]
+                },
+                {
+                    "heading": "Nuestro contenido",
+                    "body": [
+                        "El nombre, el logotipo y el contenido de EUDA pertenecen a [razón social]. No los copies sin permiso."
+                    ]
+                },
+                {
+                    "heading": "Responsabilidad",
+                    "body": [
+                        "[Cláusula de limitación de responsabilidad, pendiente de nuestro asesor.]"
+                    ]
+                },
+                {
+                    "heading": "Ley aplicable",
+                    "body": [
+                        "[Estas condiciones se rigen por la legislación de [España / Inglaterra y Gales].]"
+                    ]
+                },
+                {
+                    "heading": "Cambios y contacto",
+                    "body": [
+                        "Podemos actualizar estas condiciones; la fecha de arriba indica la versión más reciente. Preguntas: hello@euda.dev."
+                    ]
+                }
+            ]
+        }
     }
 }

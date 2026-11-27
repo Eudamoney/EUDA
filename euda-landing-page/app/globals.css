@@ -1,104 +1,315 @@
-@import "tailwindcss";
-
-@theme {
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-
-  --color-success: var(--success);
-
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-}
+/* EUDA landing page, built on whitelabel-ds in its default black-and-white skin.
+   Every value reads a design system token, except page widths and the logo ratio. */
 
 :root {
-  --radius: 0.75rem;
-
-  /* EUDA Design System — Blue Primary */
-  --background: #ffffff;
-  --foreground: #0d1117;
-
-  --card: #ffffff;
-  --card-foreground: #0d1117;
-
-  --primary: #1152d4;
-  --primary-foreground: #ffffff;
-
-  --secondary: #f6f6f8;
-  --secondary-foreground: #374151;
-
-  --muted: #f6f6f8;
-  --muted-foreground: #6b7280;
-
-  --accent: #eef0f4;
-  --accent-foreground: #0d1117;
-
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-
-  --success: #16a34a;
-
-  --border: #e2e5ec;
-  --input: #e2e5ec;
-  --ring: #1152d4;
+  --eu-max: 1120px;
+  --eu-move: var(--mo-dur-out) var(--mo-ease-out);
+  /* The EUDA wordmark is 94 × 42. */
+  --app-logo-ratio: 94 / 42;
 }
 
-.dark {
-  --background: #101622;
-  --foreground: #ffffff;
-
-  --card: #161e2e;
-  --card-foreground: #ffffff;
-
-  --primary: #3b76f5;
-  --primary-foreground: #ffffff;
-
-  --secondary: #1e2a40;
-  --secondary-foreground: #8ba0c0;
-
-  --muted: #1e2a40;
-  --muted-foreground: #8ba0c0;
-
-  --accent: #243050;
-  --accent-foreground: #ffffff;
-
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-
-  --success: #22c55e;
-
-  --border: #243050;
-  --input: #243050;
-  --ring: #3b76f5;
+body {
+  margin: 0;
+  background: var(--background-canvas);
+  color: var(--content-primary);
+  font-family: var(--font-family-primary);
+  -webkit-font-smoothing: antialiased;
 }
 
-@layer base {
-  * {
-    @apply border-border;
+.eu-wrap {
+  max-width: var(--eu-max);
+  margin-inline: auto;
+  padding-inline: max(var(--dimension-4), var(--canvas-padding-inline));
+}
+
+/* ---------- header ---------- */
+.eu-header { position: sticky; top: 0; z-index: 20; }
+.eu-nav { display: flex; align-items: center; gap: var(--dimension-5); }
+.eu-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dimension-1-5);
+  color: var(--content-secondary);
+  font-size: var(--type-body-small-size);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: color var(--eu-move);
+}
+.eu-nav__link:hover { color: var(--content-primary); }
+/* On a phone the header folds the nav into its "More options" sheet: stack it there. */
+.ds-app-header-v2__more .eu-nav { flex-direction: column; align-items: stretch; gap: var(--dimension-1); padding-bottom: var(--dimension-2); }
+.ds-app-header-v2__more .eu-nav__link { padding: var(--dimension-3) var(--dimension-2); font-size: var(--type-body-large-size); }
+.ds-app-header-v2__more .eu-nav > .ds-popover,
+.ds-app-header-v2__more .eu-nav > .ds-popover > .btn-v2 { width: 100%; justify-content: space-between; }
+.ds-app-header-v2__more .eu-nav > .btn-v2 { margin-top: var(--dimension-2); }
+.eu-nav__link:focus-visible { outline: var(--stroke-focus) solid var(--borders-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+/* ---------- type ---------- */
+.eu-eyebrow {
+  display: inline-block;
+  margin-bottom: var(--dimension-3);
+  font-size: var(--type-caption-size);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--content-tertiary);
+}
+.eu-h2 {
+  margin: 0;
+  font-size: clamp(28px, 3.4vw, 40px);
+  line-height: 1.1;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--font-letter-spacing-heading);
+  text-wrap: balance;
+}
+.eu-lead {
+  margin: 0;
+  color: var(--content-secondary);
+  font-size: var(--type-h4-size);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.eu-lead strong, .eu-body strong { color: var(--content-primary); font-weight: var(--font-weight-semibold); }
+.eu-body {
+  margin: 0;
+  color: var(--content-secondary);
+  font-size: var(--type-body-large-size);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+.eu-body--large { color: var(--content-primary); font-size: var(--type-h4-size); line-height: 1.5; }
+.eu-body--strong { color: var(--content-primary); font-weight: var(--font-weight-semibold); }
+
+/* ---------- sections ---------- */
+.eu-section { padding-block: var(--dimension-24); border-top: var(--stroke-default) solid var(--borders-subtle); }
+.eu-section--tight { padding-block: var(--dimension-12); }
+.eu-split {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: var(--dimension-16);
+  align-items: start;
+}
+
+/* ---------- hero ---------- */
+.eu-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-block: var(--dimension-20) var(--dimension-16);
+}
+.eu-hero__title {
+  margin: 0;
+  max-width: 18ch;
+  font-size: clamp(56px, 10vw, 128px);
+  line-height: .95;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.eu-hero__title em { font-style: normal; color: var(--content-tertiary); }
+.eu-hero__lead { max-width: 60ch; margin-top: var(--dimension-6); }
+
+/* ---------- waitlist ---------- */
+.eu-waitlist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dimension-3);
+  width: 100%;
+  max-width: 720px;
+  margin-top: var(--dimension-10);
+  text-align: start;
+  scroll-margin-top: var(--dimension-24);
+}
+.eu-waitlist__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  gap: var(--dimension-3);
+  align-items: end;
+}
+
+/* ---------- how it works: your first year ---------- */
+.eu-journey__head { max-width: 720px; margin-bottom: var(--dimension-10); }
+.eu-journey { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--dimension-5); align-items: stretch; }
+.eu-phase { display: flex; flex-direction: column; gap: var(--dimension-6); padding: var(--dimension-8); }
+.eu-phase__top { display: flex; flex-direction: column; align-items: flex-start; gap: var(--dimension-3); }
+.eu-phase__title { margin: 0; font-size: var(--type-h2-size); line-height: var(--type-h2-line-height); font-weight: var(--font-weight-semibold); letter-spacing: var(--font-letter-spacing-heading); }
+
+/* Steps on a vertical line that joins their icons. */
+.eu-steps { position: relative; display: flex; flex-direction: column; gap: var(--dimension-5); margin: 0; padding: 0; list-style: none; }
+.eu-steps::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: calc(var(--dimension-10) / 2 - var(--stroke-default) / 2);
+  top: var(--dimension-5);
+  bottom: var(--dimension-5);
+  width: var(--stroke-default);
+  background: var(--borders-default);
+  transform-origin: top;
+}
+.eu-step, .eu-unlock { position: relative; display: flex; gap: var(--dimension-4); align-items: flex-start; }
+.eu-step__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: var(--dimension-10);
+  height: var(--dimension-10);
+  border-radius: var(--radius-full);
+  border: var(--stroke-default) solid var(--borders-default);
+  background: var(--background-surface);
+  color: var(--content-primary);
+}
+.eu-step__title { margin: var(--dimension-2) 0 var(--dimension-1); font-size: var(--type-body-large-size); line-height: var(--type-body-large-line-height); font-weight: var(--font-weight-semibold); }
+.eu-step__body { margin: 0; color: var(--content-secondary); font-size: var(--type-body-default-size); line-height: 1.55; }
+
+.eu-unlocks__list { display: flex; flex-direction: column; gap: var(--dimension-3); margin: 0; padding: 0; list-style: none; }
+.eu-unlock { align-items: center; padding: var(--dimension-3); border-radius: var(--radius-control); background: var(--control-background-default); font-weight: var(--font-weight-medium); }
+
+/* The figure each phase ends on. */
+.eu-milestone { display: flex; flex-direction: column; gap: var(--dimension-1); margin: auto 0 0; padding-top: var(--dimension-6); border-top: var(--stroke-default) solid var(--borders-subtle); }
+.eu-milestone__value { font-size: var(--type-metric-size); line-height: var(--type-metric-line-height); font-weight: var(--type-metric-weight); letter-spacing: var(--font-letter-spacing-figure); font-variant-numeric: tabular-nums; }
+.eu-milestone__label { color: var(--content-tertiary); font-size: var(--type-body-default-size); }
+
+.eu-journey__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--dimension-4); margin-top: var(--dimension-6); }
+.eu-note { margin: 0; color: var(--content-tertiary); font-size: var(--type-caption-size); }
+.eu-note { scroll-margin-top: var(--dimension-24); }
+/* The asterisk on each example figure links to the note under the meter. */
+.eu-asterisk {
+  margin-inline-start: var(--dimension-0-5);
+  vertical-align: super;
+  font-size: .4em;
+  line-height: 0;
+  color: var(--content-tertiary);
+  text-decoration: none;
+  transition: color var(--eu-move);
+}
+.eu-asterisk:hover { color: var(--content-primary); }
+.eu-asterisk:focus-visible { outline: var(--stroke-focus) solid var(--borders-focus); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+.eu-tags { display: flex; flex-wrap: wrap; gap: var(--dimension-2); margin: var(--dimension-1) 0 0; padding: 0; list-style: none; }
+
+/* ---------- social proof ---------- */
+.eu-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--dimension-3);
+  margin-block: 0;
+  color: var(--content-secondary);
+  font-size: var(--type-body-large-size);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+/* ---------- about ---------- */
+.eu-prose { display: flex; flex-direction: column; gap: var(--dimension-5); max-width: 62ch; }
+
+/* ---------- final call to action ---------- */
+.eu-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--dimension-10);
+  padding: var(--dimension-20) var(--dimension-6);
+  border-radius: var(--radius-surface);
+  background: var(--control-background-default);
+  text-align: center;
+}
+.eu-cta__title {
+  margin: 0;
+  max-width: 18ch;
+  text-wrap: balance;
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: 1;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+}
+.eu-cta__title em { display: block; margin-top: var(--dimension-2); font-style: normal; color: var(--content-tertiary); }
+.eu-cta__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--dimension-3); }
+.eu-cta__link { display: inline-flex; border-radius: var(--radius-control); text-decoration: none; color: inherit; transition: translate var(--eu-move); }
+.eu-cta__link:active { scale: var(--press-scale, .97); transition-duration: var(--mo-dur-press); }
+.eu-cta__link:focus-visible { outline: var(--stroke-focus) solid var(--borders-focus); outline-offset: 2px; }
+
+/* ---------- privacy and terms ---------- */
+.eu-legal { display: flex; flex-direction: column; gap: var(--dimension-6); max-width: 760px; padding-block: var(--dimension-16) var(--dimension-8); }
+.eu-legal__updated { margin: calc(var(--dimension-4) * -1) 0 0; color: var(--content-tertiary); font-size: var(--type-body-small-size); }
+.eu-legal__section { display: flex; flex-direction: column; gap: var(--dimension-3); }
+.eu-legal__heading { margin: 0; font-size: var(--type-h3-size); line-height: var(--type-h3-line-height); font-weight: var(--font-weight-semibold); }
+
+/* ---------- footer ---------- */
+.eu-footer { margin-top: var(--dimension-12); }
+
+/* ---------- smaller screens ---------- */
+@media (max-width: 860px) {
+  .eu-split { grid-template-columns: 1fr; gap: var(--dimension-8); }
+  .eu-journey { grid-template-columns: 1fr; }
+  .eu-section { padding-block: var(--dimension-16); }
+}
+@media (max-width: 640px) {
+  .eu-hero { padding-block: var(--dimension-12) var(--dimension-10); }
+  .eu-waitlist__form { grid-template-columns: 1fr; }
+  .eu-phase { padding: var(--dimension-5); }
+  .eu-cta { padding: var(--dimension-12) var(--dimension-4); }
+  .eu-cta__actions { flex-direction: column; align-items: stretch; width: 100%; }
+  .eu-cta__actions > * { justify-content: center; }
+}
+
+/* ---------- theme switch ---------- */
+.eu-theme-toggle svg { animation: eu-spin-in var(--mo-dur-out-spring) var(--mo-ease-out-spring) both; }
+@keyframes eu-spin-in { from { opacity: 0; rotate: -90deg; scale: .6; } }
+
+/* ---------- motion ----------
+   All timing reads the design system's motion tokens: the reveal weights (duration, stagger, rise, blur)
+   and the --mo-ease-* curves. Nothing moves under prefers-reduced-motion. Scroll reveals only hide content
+   while <html data-motion="on"> is set by the boot script, so without JavaScript everything just shows. */
+@media (prefers-reduced-motion: no-preference) {
+  /* Hero: title, lead and form rise in on load, one after another. */
+  .eu-enter {
+    animation: eu-rise var(--motion-reveal-duration-heavy) var(--mo-ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--motion-reveal-stagger-heavy) + 80ms);
   }
-  body {
-    @apply bg-background text-foreground antialiased;
+  @keyframes eu-rise {
+    from { opacity: 0; translate: 0 var(--motion-reveal-rise-heavy); filter: blur(var(--motion-reveal-blur-normal)); }
   }
+
+  /* Sections rise in as they scroll into view. */
+  [data-motion="on"] .eu-reveal {
+    transition:
+      opacity var(--motion-reveal-duration-heavy) var(--mo-ease-out),
+      translate var(--motion-reveal-duration-heavy) var(--mo-ease-out),
+      filter var(--motion-reveal-duration-heavy) var(--mo-ease-out),
+      scale var(--mo-dur-out-spring) var(--mo-ease-out-spring);
+  }
+  [data-motion="on"] .eu-reveal:not(.is-in) {
+    opacity: 0;
+    translate: 0 var(--dimension-6);
+    filter: blur(var(--motion-reveal-blur-light));
+  }
+  /* How it works: the second phase card follows the first. */
+  [data-motion="on"] .eu-phase--two.eu-reveal { transition-delay: var(--motion-reveal-stagger-heavy); }
+
+  /* The step line draws down, then each step and unlock lands in turn. */
+  [data-motion="on"] .eu-phase.eu-reveal:not(.is-in) .eu-steps::before { scale: 1 0; }
+  [data-motion="on"] .eu-phase.eu-reveal .eu-steps::before { transition: scale var(--mo-dur-in-out-spring) var(--mo-ease-in-out) 200ms; }
+  [data-motion="on"] .eu-phase.is-in :is(.eu-step, .eu-unlock) {
+    animation: eu-rise var(--motion-reveal-duration-normal) var(--mo-ease-out) both;
+    animation-delay: calc(var(--i, 0) * 220ms + 250ms);
+  }
+  [data-motion="on"] .eu-phase.is-in .eu-step__icon {
+    animation: eu-pop var(--mo-dur-out-spring) var(--mo-ease-out-spring) both;
+    animation-delay: calc(var(--i, 0) * 220ms + 250ms);
+  }
+  @keyframes eu-pop { from { scale: .5; opacity: 0; } }
+  [data-motion="on"] .eu-phase.is-in .eu-milestone { animation: eu-rise var(--motion-reveal-duration-heavy) var(--mo-ease-out-spring) 900ms both; }
+
+
+  /* The How it Works tags follow their card, one by one. */
+  [data-motion="on"] .eu-reveal.is-in .eu-stagger {
+    animation: eu-rise var(--motion-reveal-duration-normal) var(--mo-ease-out-spring) both;
+    animation-delay: calc(var(--i, 0) * var(--motion-reveal-stagger-heavy) + 250ms);
+  }
+
+  /* Switching theme cross-fades the page (browsers with view transitions). */
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation-duration: var(--mo-dur-out); animation-timing-function: var(--mo-ease-out); }
 }

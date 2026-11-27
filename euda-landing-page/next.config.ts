@@ -7,13 +7,14 @@ const nextConfig: NextConfig = {
     async rewrites() {
         const taxCalcUrl = process.env.TAX_CALCULATOR_URL || 'https://euda-5gdk.vercel.app';
         return [
+            // The tax calculator is its own app; one deployment serves every country.
             {
-                source: '/tax-calculator/spain',
-                destination: `${taxCalcUrl}/tax-calculator/spain/`,
+                source: '/tax-calculator/:country(spain|uk)',
+                destination: `${taxCalcUrl}/tax-calculator/:country`,
             },
             {
-                source: '/tax-calculator/spain/:path*',
-                destination: `${taxCalcUrl}/tax-calculator/spain/:path*`,
+                source: '/tax-calculator/:path*',
+                destination: `${taxCalcUrl}/tax-calculator/:path*`,
             },
         ];
     },
