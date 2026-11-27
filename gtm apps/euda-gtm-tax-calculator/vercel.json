@@ -6,16 +6,16 @@
             "destination": "/assets/$1"
         },
         {
+            "source": "/tax-calculator",
+            "destination": "/"
+        },
+        {
             "source": "/tax-calculator/(spain|uk)",
-            "destination": "/index.html"
+            "destination": "/"
         },
         {
             "source": "/tax-calculator/(spain|uk)/(.*)",
-            "destination": "/index.html"
-        },
-        {
-            "source": "/tax-calculator",
-            "destination": "/index.html"
+            "destination": "/"
         },
         {
             "source": "/tax-calculator/(.*)",
