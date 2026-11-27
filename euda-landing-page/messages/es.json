@@ -114,7 +114,7 @@
                 {
                     "heading": "Dónde se guardan y quién los trata",
                     "body": [
-                        "La web está alojada en Vercel. Los datos de la lista de espera se guardan en una base de datos de Upstash. Ambos actúan como encargados del tratamiento y solo tratan los datos siguiendo nuestras instrucciones.",
+                        "La web está alojada en Vercel, y los datos de la lista de espera se guardan de forma privada en el almacenamiento de Vercel (Vercel Blob). Vercel actúa como encargado del tratamiento y solo trata los datos siguiendo nuestras instrucciones.",
                         "Región de almacenamiento y transferencias internacionales: [pendiente de confirmar, con las garantías aplicadas, por ejemplo cláusulas contractuales tipo]."
                     ]
                 },

@@ -1,15 +1,12 @@
-import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
-
-const redis = new Redis({
-    url: process.env.KV_REST_API_URL!,
-    token: process.env.KV_REST_API_TOKEN!,
-});
+import { isSignedUp, saveSignup } from "./store";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MARKETS = ["es", "uk"];
 const LANGUAGES = ["es", "en"];
 
+// 201 = joined, 200 = already on the list, 400 = invalid email, 500 = storage failed.
+// The landing page shows its own copy for each; the tax calculator shows `message` / `error`.
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
@@ -21,51 +18,21 @@ export async function POST(request: NextRequest) {
         const language = LANGUAGES.includes(body.language) ? body.language : "unknown";
 
         if (!email || !EMAIL_REGEX.test(email)) {
-            return NextResponse.json(
-                { error: "Please enter a valid email address." },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: "Please enter a valid email address." }, { status: 400 });
         }
 
-        // Check if already subscribed
-        const exists = await redis.zscore("waitlist:emails", email);
-        if (exists !== null) {
+        if (await isSignedUp(email)) {
             return NextResponse.json(
                 { message: "You're already on the waitlist! We'll be in touch soon." },
-                { status: 200 }
+                { status: 200 },
             );
         }
 
-        // Store email with timestamp as score (for ordering)
-        await redis.zadd("waitlist:emails", {
-            score: Date.now(),
-            member: email,
-        });
+        await saveSignup({ email, city, market, language, signup_date: new Date().toISOString() });
 
-        // Store detailed user info in a Hash
-        await redis.hset(`waitlist:user:${email}`, {
-            email,
-            city,
-            market,
-            language,
-            signup_date: new Date().toISOString(),
-        });
-
-        // Increment counter
-        const count = await redis.zcard("waitlist:emails");
-
-        return NextResponse.json(
-            {
-                message: "Welcome to the waitlist! We'll be in touch soon.",
-                count,
-            },
-            { status: 201 }
-        );
+        return NextResponse.json({ message: "Welcome to the waitlist! We'll be in touch soon." }, { status: 201 });
     } catch (error) {
         console.error("Waitlist error:", error);
-        return NextResponse.json(
-            { error: "Something went wrong. Please try again." },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
     }
 }

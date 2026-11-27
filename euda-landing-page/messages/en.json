@@ -114,7 +114,7 @@
                 {
                     "heading": "Where it is stored and who processes it",
                     "body": [
-                        "The website is hosted by Vercel. Waitlist details are stored in a database run by Upstash. Both act as our processors and only handle the data on our instructions.",
+                        "The website is hosted by Vercel, and waitlist details are stored privately in Vercel's own storage (Vercel Blob). Vercel acts as our processor and only handles the data on our instructions.",
                         "Storage region and international transfers: [to confirm, with the safeguards used, for example standard contractual clauses]."
                     ]
                 },
