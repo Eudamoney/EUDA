@@ -2,12 +2,24 @@
     "cleanUrls": true,
     "rewrites": [
         {
-            "source": "/tax-calculator/spain/(.*)",
-            "destination": "/$1"
+            "source": "/tax-calculator/assets/(.*)",
+            "destination": "/assets/$1"
         },
         {
-            "source": "/tax-calculator/spain",
+            "source": "/tax-calculator/(spain|uk)",
             "destination": "/index.html"
+        },
+        {
+            "source": "/tax-calculator/(spain|uk)/(.*)",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/tax-calculator",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/tax-calculator/(.*)",
+            "destination": "/$1"
         }
     ]
 }

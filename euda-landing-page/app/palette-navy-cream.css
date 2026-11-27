@@ -1,0 +1,138 @@
+/* Navy and cream palette: an experiment on top of the two themes, switched on by <html data-palette="navy-cream">
+   (PALETTE in app/components/landing-utils.ts). Like theme-dark.css and theme-light.css it only overrides the
+   design system's colour scales; remove the attribute to go back to black and white.
+   Dark: navy page, cream text, cream primary button with navy text.
+   Light: cream page, navy text, navy primary button with cream text.
+   Contrast checked: every text pairing is 4.9:1 or more (light-mode placeholder on a field is the lowest). */
+
+:root[data-palette="navy-cream"][data-theme="dark"] {
+  /* Page and text: navy at 0, through blue-greys, to cream at 900. */
+  --color-neutral-0: #0b1528;
+  --color-neutral-25: #0e1a30;
+  --color-neutral-50: #122039;
+  --color-neutral-100: #172743;
+  --color-neutral-200: #1e304f;
+  --color-neutral-300: #2a3d60;
+  --color-neutral-400: #44567a;
+  --color-neutral-500: #6f7d99;
+  --color-neutral-600: #a3a49b;
+  --color-neutral-700: #c8bea8;
+  --color-neutral-800: #ebe3d2;
+  --color-neutral-900: #f8f2e6;
+  --color-neutral-500-20: #ebe3d233;
+
+  --color-control-0: #0d182d;
+  --color-control-25: #0f1b32;
+  --color-control-50: #142240;
+  --color-control-100: #1a2a4a;
+  --color-control-200: #213355;
+  --color-control-300: #2c3f63;
+  --color-control-400: #4a5b7e;
+  --color-control-500: #7b88a3;
+  --color-control-600: #a7adb9;
+  --color-control-700: #cfc6b2;
+  --color-control-800: #e8e0ce;
+  --color-control-900: #f3ecdd;
+  --color-control-950: #faf6ee;
+
+  --color-zinc-0: #0d182d;
+  --color-zinc-25: #0f1b32;
+  --color-zinc-50: #122039;
+  --color-zinc-100: #172743;
+  --color-zinc-200: #213355;
+  --color-zinc-300: #2c3f63;
+  --color-zinc-400: #4a5b7e;
+  --color-zinc-500: #7b88a3;
+  --color-zinc-600: #a7adb9;
+  --color-zinc-700: #cfc6b2;
+  --color-zinc-800: #e8e0ce;
+  --color-zinc-900: #f3ecdd;
+  --color-zinc-700-20: #cfc6b233;
+
+  /* Cream button, navy label. 700 rest, 600 hover, 800 pressed. */
+  --color-primary-0: #0b1528;
+  --color-primary-25: #0e1a30;
+  --color-primary-50: #122039;
+  --color-primary-100: #182744;
+  --color-primary-200: #22335a;
+  --color-primary-300: #3b4d75;
+  --color-primary-400: #6f7d99;
+  --color-primary-500: #b5ad99;
+  --color-primary-600: #fffaf0;
+  --color-primary-700: #f3ead6;
+  --color-primary-800: #ddd2bb;
+  --color-primary-900: #fffaf0;
+
+  --background-subtle: rgba(248, 242, 230, .1);
+  --button-raised-primary: inset 0 -1px 0 0 #0b152840, inset 0 0 0 1px #f3ead6;
+  --button-shine: #0b152822;
+  /* Orb on the hero button: navy circle with a cream arrow, so it stands out on the cream pill. */
+  --brand-accent: #1e304f;
+  --brand-accent-content: #f8f2e6;
+  --brand-accent-strong: #f8f2e6;
+  --brand-accent-light: #44567a;
+}
+
+:root[data-palette="navy-cream"][data-theme="light"] {
+  /* Page and text: cream at 0, through warm greys, to navy at 900. */
+  --color-neutral-0: #f8f3e9;
+  --color-neutral-25: #f4eee2;
+  --color-neutral-50: #efe8da;
+  --color-neutral-100: #e8dfce;
+  --color-neutral-200: #ddd3c0;
+  --color-neutral-300: #cbc0aa;
+  --color-neutral-400: #a9a08c;
+  --color-neutral-500: #857f72;
+  --color-neutral-600: #5f6474;
+  --color-neutral-700: #4a5672;
+  --color-neutral-800: #1d2a47;
+  --color-neutral-900: #0b1528;
+  --color-neutral-500-20: #1d2a4733;
+
+  --color-control-0: #fbf7ef;
+  --color-control-25: #f7f2e8;
+  --color-control-50: #f1eadc;
+  --color-control-100: #e9e0cf;
+  --color-control-200: #ded4c1;
+  --color-control-300: #cdc2ab;
+  --color-control-400: #a69d88;
+  --color-control-500: #7d7769;
+  --color-control-600: #555c6d;
+  --color-control-700: #3a4660;
+  --color-control-800: #22304d;
+  --color-control-900: #121e36;
+  --color-control-950: #0b1528;
+
+  --color-zinc-0: #fbf7ef;
+  --color-zinc-25: #f7f2e8;
+  --color-zinc-50: #f1eadc;
+  --color-zinc-100: #e9e0cf;
+  --color-zinc-200: #ded4c1;
+  --color-zinc-300: #cdc2ab;
+  --color-zinc-400: #a69d88;
+  --color-zinc-500: #7d7769;
+  --color-zinc-600: #555c6d;
+  --color-zinc-700: #3a4660;
+  --color-zinc-800: #22304d;
+  --color-zinc-900: #121e36;
+  --color-zinc-700-20: #3a466033;
+
+  /* Navy button, cream label. 700 rest, 600 hover, 800 pressed. */
+  --color-primary-0: #fbf7ef;
+  --color-primary-25: #f7f2e8;
+  --color-primary-50: #efe8da;
+  --color-primary-100: #e3dac8;
+  --color-primary-200: #cbc0aa;
+  --color-primary-300: #9aa0ae;
+  --color-primary-400: #6b7590;
+  --color-primary-500: #3e4a68;
+  --color-primary-600: #1d2d52;
+  --color-primary-700: #0b1528;
+  --color-primary-800: #050c19;
+  --color-primary-900: #050c19;
+
+  --button-raised-primary: inset 0 -1px 0 1px #000000cc, inset 0 0 0 1px #1d2d52, inset 0 .5px 0 1px #ffffff40;
+  --brand-accent: #5f6b8a;
+  --brand-accent-strong: #0b1528;
+  --brand-accent-light: #a9a08c;
+}

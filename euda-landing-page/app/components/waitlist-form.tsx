@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, FormEvent } from "react";
-import { ArrowRight, CheckCircle2, Loader2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useState, FormEvent, CSSProperties } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { Callout, Icon, Input, OrbButton } from "whitelabel-ds";
+import { useMarket } from "./market-context";
 
-export function WaitlistForm({ id }: { id?: string }) {
+export function WaitlistForm({ id, className, style }: { id?: string; className?: string; style?: CSSProperties }) {
     const t = useTranslations("waitlist");
+    const locale = useLocale();
+    const market = useMarket();
     const [email, setEmail] = useState("");
     const [city, setCity] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -20,23 +23,23 @@ export function WaitlistForm({ id }: { id?: string }) {
             const res = await fetch("/api/waitlist", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, city }),
+                // Market and language let the London and Madrid sign-ups be compared.
+                body: JSON.stringify({ email, city, market: market.id, language: locale }),
             });
 
-            const data = await res.json();
-
+            // 201 = joined, 200 = already on the list, 400 = invalid email. The copy is ours, in the visitor's language.
             if (res.ok) {
                 setStatus("success");
-                setMessage(data.message);
+                setMessage(res.status === 201 ? t("successBody") : t("alreadyJoined"));
                 setEmail("");
                 setCity("");
             } else {
                 setStatus("error");
-                setMessage(data.error);
+                setMessage(res.status === 400 ? t("invalidEmail") : t("genericError"));
             }
         } catch {
             setStatus("error");
-            setMessage("Something went wrong. Please try again.");
+            setMessage(t("genericError"));
         }
 
         setTimeout(() => {
@@ -47,61 +50,51 @@ export function WaitlistForm({ id }: { id?: string }) {
 
     if (status === "success") {
         return (
-            <div id={id} className="flex flex-col items-center gap-4">
-                <div className="flex items-center gap-3 px-6 py-4 bg-success/10 text-success rounded-2xl border border-success/20 font-semibold text-center">
-                    <CheckCircle2 size={20} className="shrink-0" />
+            <div id={id} className={["eu-waitlist", className].filter(Boolean).join(" ")} style={style} role="status">
+                <Callout icon="circle-check" title={t("success")}>
                     {message}
-                </div>
+                </Callout>
             </div>
         );
     }
 
     return (
-        <div id={id} className="flex flex-col items-center gap-4 w-full">
-            <form
-                onSubmit={handleSubmit}
-                className="flex flex-col sm:flex-row gap-2 w-full max-w-2xl p-1.5 bg-card rounded-2xl border border-border shadow-lg focus-within:border-primary/40 transition-all"
-            >
-                <input
+        <div id={id} className={["eu-waitlist", className].filter(Boolean).join(" ")} style={style}>
+            <form className="eu-waitlist__form" onSubmit={handleSubmit}>
+                <Input
+                    className="eu-waitlist__email"
                     type="email"
+                    label={t("emailLabel")}
                     placeholder={t("placeholder")}
+                    autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="flex-1 px-5 py-3 bg-transparent outline-none text-base font-medium min-w-0"
                 />
-                <div className="hidden sm:block w-px h-8 bg-border/50 self-center" />
-                <input
+                <Input
+                    className="eu-waitlist__city"
                     type="text"
+                    label={t("cityLabel")}
                     placeholder={t("cityPlaceholder")}
+                    autoComplete="address-level2"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    className="flex-1 px-5 py-3 bg-transparent outline-none text-base font-medium min-w-0"
                 />
-                <button
+                {/* The design system's "super primary" call to action, used once per page: the orb grows and the
+                    arrow nudges on hover. */}
+                <OrbButton
                     type="submit"
-                    disabled={status === "loading"}
-                    className="px-6 py-3 bg-primary text-primary-foreground font-bold rounded-xl hover:bg-[#0e44b0] active:scale-[0.98] transition-all flex items-center justify-center gap-2 group whitespace-nowrap text-base disabled:opacity-70"
+                    size="lg"
+                    loading={status === "loading"}
+                    icon={<Icon name="arrow-right" size={16} />}
                 >
-                    {status === "loading" ? (
-                        <>
-                            <Loader2 size={18} className="animate-spin" />
-                            {t("joining")}
-                        </>
-                    ) : (
-                        <>
-                            {t("button")}
-                            <ArrowRight
-                                size={18}
-                                className="group-hover:translate-x-1 transition-transform"
-                            />
-                        </>
-                    )}
-                </button>
+                    {t("button")}
+                </OrbButton>
             </form>
-
             {status === "error" && (
-                <p className="text-destructive text-sm font-medium">{message}</p>
+                <Callout tone="error" role="alert">
+                    {message}
+                </Callout>
             )}
         </div>
     );

@@ -1,0 +1,30 @@
+/* High-contrast light theme for whitelabel-ds, the counterpart of theme-dark.css: done by overriding tokens,
+   not component CSS. whitelabel-ds ships a soft light skin (#1a1a1a text, #242424 buttons); this pushes it
+   to true black on true white, with a lighter grey for the second line of each headline so the two lines
+   contrast more. Every text pairing stays above 4.5:1 (tertiary 6.7:1, placeholder 5.2:1 on fields).
+   Status colours (error, info, success, warning) are left as the system ships them. */
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Text and lines. 0 stays white; 900 is now true black. */
+  --color-neutral-200: #e6e6e6;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-600: #666666;
+  --color-neutral-700: #5c5c5c;
+  --color-neutral-800: #1f1f1f;
+  --color-neutral-900: #000000;
+
+  /* Field and panel fills, a touch deeper so they read against white. */
+  --color-control-50: #f4f4f4;
+  --color-control-100: #ececec;
+  --color-control-200: #e2e2e2;
+
+  /* Action colour: true black buttons. 700 rest, 600 hover, 800 pressed. */
+  --color-primary-600: #2b2b2b;
+  --color-primary-700: #000000;
+  --color-primary-800: #000000;
+
+  /* Links and the orb button's accent. */
+  --brand-accent-strong: #000000;
+}

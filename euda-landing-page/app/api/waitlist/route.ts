@@ -7,12 +7,18 @@ const redis = new Redis({
 });
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MARKETS = ["es", "uk"];
+const LANGUAGES = ["es", "en"];
 
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const email = body.email?.trim()?.toLowerCase();
         const city = body.city?.trim() || "Unknown";
+        // Which site the sign-up came from (es = eudamoney.com, uk = eudamoney.co.uk) and its language.
+        // Older pages (the tax calculator) don't send them: stored as "unknown".
+        const market = MARKETS.includes(body.market) ? body.market : "unknown";
+        const language = LANGUAGES.includes(body.language) ? body.language : "unknown";
 
         if (!email || !EMAIL_REGEX.test(email)) {
             return NextResponse.json(
@@ -40,6 +46,8 @@ export async function POST(request: NextRequest) {
         await redis.hset(`waitlist:user:${email}`, {
             email,
             city,
+            market,
+            language,
             signup_date: new Date().toISOString(),
         });
 

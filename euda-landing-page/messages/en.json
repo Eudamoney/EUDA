@@ -1,4 +1,8 @@
 {
+    "meta": {
+        "title": "EUDA - Make Rent Work",
+        "description": "EUDA puts a slice of what rent costs you into a Rent Pot that grows. You pay the same. Your landlord gets the same."
+    },
     "hero": {
         "headline": "You've paid tens of thousands in rent.",
         "headline2": "What do you have to show for it?",
@@ -10,13 +14,17 @@
         "cityPlaceholder": "City",
         "button": "Join the Waitlist",
         "joining": "Joining...",
-        "success": "You're on the list!"
+        "success": "You're on the list!",
+        "emailLabel": "Email",
+        "cityLabel": "City (optional)",
+        "genericError": "Something went wrong. Please try again.",
+        "successBody": "We'll be in touch soon.",
+        "alreadyJoined": "You're already on the waitlist. We'll be in touch soon.",
+        "invalidEmail": "Please enter a valid email address."
     },
     "howItWorks": {
         "title": "How it Works",
-        "p1": "Every month you pay rent through EUDA, a portion goes into your",
         "rentPot": "Rent Pot",
-        "p2": "It adds up quietly. 12 months later you have real money that came entirely from rent you were already paying.",
         "noFees": "No fees",
         "noCatches": "No catches",
         "landlord": "Your landlord doesn't need to do anything"
@@ -30,9 +38,7 @@
         "p2pre": "The average renter spends",
         "p2bold": "40% of their take-home pay",
         "p2post": "on rent. None of it comes back.",
-        "p3": "EUDA doesn't change what you pay. It changes what happens to it.",
-        "p4pre": "We intercept a small portion of what was already leaving - from interest on your payment, from utility switches, from local spending - and we put it in a",
-        "p4post": "with your name on it. It's yours. It moves with you when you move. And it grows every single month, whether you think about it or not.",
+        "p3": "We believe paying rent should earn you something back. And being a reliable, consistent tenant should earn you even more.",
         "p5": "We're building this now. If you're a renter who's done watching rent disappear, get on the list."
     },
     "cta": {
@@ -43,15 +49,148 @@
     },
     "nav": {
         "tools": "Tools",
-        "taxCalculator": "Where Do Your Taxes Go?",
+        "taxCalculatorSpain": "Where do your taxes go? Spain",
+        "taxCalculatorUk": "Where do your taxes go? UK",
         "community": "Community",
         "about": "About",
-        "joinWaitlist": "Join Waitlist"
+        "joinWaitlist": "Join Waitlist",
+        "themeToLight": "Switch to light mode",
+        "themeToDark": "Switch to dark mode"
     },
     "footer": {
         "terms": "Terms",
         "privacy": "Privacy",
         "contact": "Contact",
-        "copyright": "© 2026 EUDA. Built with love."
+        "copyright": "© 2026 EUDA. Built with love.",
+        "legalLinks": "Legal information"
+    },
+    "journey": {
+        "eyebrow": "Your first year",
+        "phase1Title": "Set up. Start saving.",
+        "step1Title": "Connect your bank",
+        "step1Body": "Link your account securely with open banking. Your renter profile is created for you.",
+        "step2Title": "Switch utilities and broadband",
+        "step2Body": "Move your bills to better deals. What you save goes into your Rent Pot.",
+        "step3Title": "Invite friends",
+        "step3Body": "Bring along friends who rent. Your pot grows faster together.",
+        "phase1Milestone": "in your Rent Pot by month 6",
+        "phase2Title": "More than money.",
+        "phase2Body": "Being a member makes renting better, not just cheaper.",
+        "unlockScore": "Renter profile score",
+        "unlock1": "Rental contract reviews",
+        "unlock2": "Access to honest and fair landlords with exclusive properties",
+        "unlock3": "Tools to make rent fairer",
+        "note": "Example amounts. What you save depends on your rent amount, bills and the actions you take with us.",
+        "noteLink": "See note on example amounts"
+    },
+    "legal": {
+        "draftTitle": "Draft",
+        "draftBody": "This page is a draft. Text in [square brackets] is still to be confirmed by EUDA and its legal adviser.",
+        "privacy": {
+            "title": "Privacy policy",
+            "updated": "Last updated: [date]",
+            "sections": [
+                {
+                    "heading": "Who we are",
+                    "body": [
+                        "EUDA is run by [company legal name], [registered address], [company number]. We are the data controller for the personal data described here.",
+                        "Questions about your data: hello@euda.dev."
+                    ]
+                },
+                {
+                    "heading": "What we collect",
+                    "body": [
+                        "When you join the waitlist we collect your email address, the city you enter (optional) and the date you signed up.",
+                        "[If you add the planned fields: the market and language you signed up in, and the advertising campaign that brought you to the site.]"
+                    ]
+                },
+                {
+                    "heading": "Why we use it and our legal basis",
+                    "body": [
+                        "We use your details to tell you when EUDA launches in your city and to send you the updates you signed up for.",
+                        "Legal basis: [your consent / our legitimate interests — to confirm with our adviser]."
+                    ]
+                },
+                {
+                    "heading": "Where it is stored and who processes it",
+                    "body": [
+                        "The website is hosted by Vercel. Waitlist details are stored in a database run by Upstash. Both act as our processors and only handle the data on our instructions.",
+                        "Storage region and international transfers: [to confirm, with the safeguards used, for example standard contractual clauses]."
+                    ]
+                },
+                {
+                    "heading": "How long we keep it",
+                    "body": [
+                        "[We keep waitlist details until you ask us to remove them, or for [period] after launch, whichever comes first.]"
+                    ]
+                },
+                {
+                    "heading": "Your rights",
+                    "body": [
+                        "You can ask to see, correct or delete your data, object to how we use it, or withdraw your consent at any time. Email hello@euda.dev and we will reply within one month."
+                    ]
+                },
+                {
+                    "heading": "Cookies and analytics",
+                    "body": [
+                        "[This site does not set cookies. If cookie-free analytics are added, describe them here.]"
+                    ]
+                },
+                {
+                    "heading": "Complaints",
+                    "body": [
+                        "You can complain to the data protection authority: in the UK the Information Commissioner's Office (ico.org.uk), in Spain the Agencia Española de Protección de Datos (aepd.es)."
+                    ]
+                }
+            ]
+        },
+        "terms": {
+            "title": "Terms of use",
+            "updated": "Last updated: [date]",
+            "sections": [
+                {
+                    "heading": "About these terms",
+                    "body": [
+                        "These terms cover your use of this website, run by [company legal name]. By using the site you agree to them."
+                    ]
+                },
+                {
+                    "heading": "The waitlist",
+                    "body": [
+                        "Joining the waitlist is free and does not create an account or any obligation on either side. EUDA is not yet available, and features, examples and amounts on this site may change before launch."
+                    ]
+                },
+                {
+                    "heading": "Tax calculators and examples",
+                    "body": [
+                        "The tax calculators and the Rent Pot examples are estimates for information only. They are not tax, financial or legal advice. Check your own situation with HMRC, the Agencia Tributaria or a qualified adviser."
+                    ]
+                },
+                {
+                    "heading": "Our content",
+                    "body": [
+                        "The EUDA name, logo and site content belong to [company legal name]. Please don't copy them without permission."
+                    ]
+                },
+                {
+                    "heading": "Liability",
+                    "body": [
+                        "[Limitation of liability wording, to be supplied by our adviser.]"
+                    ]
+                },
+                {
+                    "heading": "Governing law",
+                    "body": [
+                        "[These terms are governed by the laws of [England and Wales / Spain].]"
+                    ]
+                },
+                {
+                    "heading": "Changes and contact",
+                    "body": [
+                        "We may update these terms; the date at the top shows the latest version. Questions: hello@euda.dev."
+                    ]
+                }
+            ]
+        }
     }
 }

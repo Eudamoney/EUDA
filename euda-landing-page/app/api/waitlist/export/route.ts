@@ -20,15 +20,18 @@ export async function GET(request: NextRequest) {
         });
 
         // Build CSV with city from user hash
-        let csv = "Email,City,Signed Up\n";
+        // Quote every field: cities can contain commas ("Madrid, Spain").
+        const cell = (v: string) => `"${String(v).replace(/"/g, '""')}"`;
+        let csv = "Email,City,Market,Language,Signed Up\n";
 
         for (let i = 0; i < results.length; i += 2) {
             const email = results[i] as string;
             const timestamp = results[i + 1] as number;
             const date = new Date(timestamp).toISOString();
             const userInfo = await redis.hgetall(`waitlist:user:${email}`);
-            const city = (userInfo as Record<string, string>)?.city || "Unknown";
-            csv += `${email},${city},${date}\n`;
+            const info = (userInfo ?? {}) as Record<string, string>;
+            // Sign-ups from before markets existed have no market or language.
+            csv += [email, info.city || "Unknown", info.market || "", info.language || "", date].map(cell).join(",") + "\n";
         }
 
         return new NextResponse(csv, {
