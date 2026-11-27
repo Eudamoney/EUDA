@@ -34,3 +34,6 @@ npm-debug.log*
 # Misc
 .DS_Store
 *.pem
+
+# The vendored design system build must be committed (Vercel installs it from here). See euda-landing-page/vendor/whitelabel-ds/VENDORED.md
+!euda-landing-page/vendor/whitelabel-ds/dist
